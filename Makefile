@@ -1,7 +1,11 @@
 CC = gcc
+CFLAGS = -ggdb
 
 %.o: %.c
-	gcc $< -o $@
+	gcc $(CFLAGS) $< -o $@
 
-run: disassembler.o
+disassemble: disassembler.o
 	./disassembler.o invaders
+
+emulator: emulator.o
+	./emulator.o
