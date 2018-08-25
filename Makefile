@@ -1,11 +1,18 @@
+.PHONY: disassembler
+
 CC = gcc
 CFLAGS = -ggdb
 
-%.o: %.c
-	gcc $(CFLAGS) $< -o $@
+EMULATOR_OBJS = emulator.c disassembler.c
+DISASSEMBLER_OBJS = disassembler.c test.c
 
-disassemble: disassembler.o
-	./disassembler.o invaders
+emulator: $(EMULATOR_OBJS)
+	gcc $(CFLAGS) $(EMULATOR_OBJS) -o emulator
+	./emulator
 
-emulator: emulator.o
-	./emulator.o
+disassembler: $(DISASSEMBLER_OBJS)
+	gcc $(DISASSEMBLER_OBJS) -o disassembler
+	./disassembler invaders
+
+clean:
+	rm *.o emulator
