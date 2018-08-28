@@ -8,7 +8,7 @@ DISASSEMBLER_OBJS = disassembler.c test.c
 
 emulator: $(EMULATOR_OBJS)
 	gcc $(CFLAGS) $(EMULATOR_OBJS) -o emulator
-	./emulator
+	./emulator invaders.h invaders.g invaders.f invaders.e
 
 disassembler: $(DISASSEMBLER_OBJS)
 	gcc $(DISASSEMBLER_OBJS) -o disassembler
@@ -16,3 +16,7 @@ disassembler: $(DISASSEMBLER_OBJS)
 
 clean:
 	rm *.o emulator
+
+test: $(EMULATOR_OBJS)
+	gcc $(CFLAGS) $(EMULATOR_OBJS) -o emulator
+	./emulator cpudiag.asm

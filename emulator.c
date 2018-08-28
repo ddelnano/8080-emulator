@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "disassembler.h"
 
@@ -27,13 +28,10 @@ typedef struct State8080 {
     struct ConditionCodes cc;
 } State8080;
 
-void read_rom_into_memory(State8080 *emu) {
-    char* rom_files[] = {"invaders.h", "invaders.g", "invaders.f", "invaders.e"};
-    int mem_offsets[] = {0, 0x800, 0x1000, 0x1800};
-    for (int i = 0; i < sizeof(rom_files) / sizeof(rom_files[0]); i++) {
+void read_rom_into_memory(State8080 *emu, unsigned int start_addr, char *rom_files[], unsigned int rom_count) {
+    unsigned int mem_offset = start_addr;
+    for (unsigned int i = 0; i < rom_count; i++) {
         char *file = rom_files[i];
-        unsigned int offset = mem_offsets[i];
-
         FILE *fp = fopen(rom_files[i], "rb");
 
         if (fp == NULL) {
@@ -44,8 +42,10 @@ void read_rom_into_memory(State8080 *emu) {
         size_t size = ftell(fp);
         fseek(fp, 0L, SEEK_SET);
 
-        fread(&emu->memory[offset], size, 1, fp);
+        fread(&emu->memory[mem_offset], size, 1, fp);
         fclose(fp);
+
+        mem_offset += size;
     }
 }
 
@@ -121,6 +121,12 @@ int emulate(State8080 *emu) {
                 emu->l = result & 0xff;
             }
             break;
+        case 0x0a: // LDAX B
+            {
+                uint16_t offset = emu->b << 8 | emu->c;
+                emu->a = emu->memory[offset];
+            }
+            break;
         case 0x0d: // DCR C
             {
                 uint8_t result = emu->c - 1;
@@ -163,6 +169,8 @@ int emulate(State8080 *emu) {
                 emu->l = result & 0xff;
             }
             break;
+        case 0x20:
+            break;
         case 0x21:                                       // LXI H, D
             emu->h = opcode[2];
             emu->l = opcode[1];
@@ -186,6 +194,14 @@ int emulate(State8080 *emu) {
                 emu->l = result & 0xff;
             }
             break;
+        case 0x2a: // LHLD addr
+            {
+                uint16_t offset = opcode[1] | opcode[2] << 8;
+                emu->l = emu->memory[offset];
+                emu->h = emu->memory[offset+1];
+                emu->pc += 2;
+            }
+            break;
         case 0x31:                                       // LXI SP, D
             emu->sp = (opcode[2] << 8) | opcode[1];
             emu->pc += 2;
@@ -203,6 +219,9 @@ int emulate(State8080 *emu) {
                 emu->memory[offset] = opcode[1];
                 emu->pc++;
             }
+            break;
+        case 0x3b:
+            emu->sp -= 1;
             break;
         /* case 0x3d: // DCR A */
         /*     { */
@@ -394,7 +413,7 @@ int emulate(State8080 *emu) {
                                             emu->cc.sign << 7    |
                                             emu->cc.auxcarry << 4|
                                             emu->cc.parity << 2  |
-                                            emu->cc.carry & 0x1);
+                                            (emu->cc.carry & 0x1));
                 emu->memory[emu->sp - 1] = emu->a;
                 emu->sp -= 2;
                 break;
@@ -430,7 +449,7 @@ int emulate(State8080 *emu) {
     return 0;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     int error = 0;
     struct State8080 emulator =  {
         .a = 0,
@@ -451,8 +470,18 @@ int main() {
             .sign = 0,
         }
     };
+    unsigned int addr = 0;
+    unsigned int files = argc - 1;
+    if (strcmp(argv[1], "--start") == 0) {
+        sscanf(argv[2], "%x", &addr);
+        argv += 2;
+        files -= 2;
 
-    read_rom_into_memory(&emulator);
+        emulator.pc = addr;
+        emulator.memory[368] = 0x7;
+    }
+
+    read_rom_into_memory(&emulator, addr, ++argv, files);
     while (error == 0) {
         error = emulate(&emulator);
     }
