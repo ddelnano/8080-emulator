@@ -59,6 +59,7 @@ int disassemble(unsigned char *code) {
         case 0x30: printf("SIM"); break;
         case 0x31: printf("LXI    SP,#$%02x%02x", code[2], code[1]); opcode_len = 3; break;
         case 0x32: printf("STA    $%02x%02x", code[2], code[1]); opcode_len = 3; break;
+        case 0x33: printf("INX    SP");   break;
         case 0x34: printf("INR    M");   break;
         case 0x35: printf("DCR    M");   break;
         case 0x36: printf("MVI    M,#$%02x", code[1]); opcode_len = 2; break;
@@ -156,6 +157,7 @@ int disassemble(unsigned char *code) {
         case 0x93: printf("SUB    E");   break;
         case 0x94: printf("SUB    H");   break;
         case 0x95: printf("SUB    L");   break;
+        case 0x96: printf("SUB    M");   break;
         case 0x97: printf("SUB    A");   break;
         case 0x98: printf("SBB    B");   break;
         case 0x99: printf("SBB    C");   break;
@@ -179,6 +181,7 @@ int disassemble(unsigned char *code) {
         case 0xab: printf("XRA    E");   break;
         case 0xac: printf("XRA    H");   break;
         case 0xad: printf("XRA    L");   break;
+        case 0xae: printf("XRA    M");   break;
         case 0xaf: printf("XRA    A");   break;
         case 0xb0: printf("ORA    B");   break;
         case 0xb1: printf("ORA    C");   break;
@@ -241,6 +244,7 @@ int disassemble(unsigned char *code) {
         case 0xf5: printf("PUSH   PSW"); break;
         case 0xf6: printf("ORI    $%02x", code[1]); opcode_len = 2; break;
         case 0xf8: printf("RM"); break;
+        case 0xf9: printf("SPHL"); break;
         case 0xfa: printf("JM     $%02x%02x", code[2], code[1]); opcode_len = 3; break;
         case 0xfc: printf("CM     $%02x%02x", code[2], code[1]); opcode_len = 3; break;
         case 0xfb: printf("EI"); break;

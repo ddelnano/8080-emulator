@@ -58,6 +58,10 @@ uint8_t read_memory_from_hl(State8080* emu)
 void write_memory_from_hl(State8080* emu, uint8_t value)
 {
     uint16_t offset = (emu->h << 8) | emu->l;
+    if (offset == 0x59d) {
+        printf("Overwriting DAA instruction back to normal!!");
+        exit(1);
+    }
     emu->memory[offset] = value;
     return;
 }
@@ -113,6 +117,18 @@ int emulate(State8080 *emu) {
                    emu->c = opcode[1];
                    emu->pc += 2;
             break;
+        case 0x02: // STAX B
+            {
+                uint16_t offset = emu->b << 8 | emu->c;
+                emu->memory[offset] = emu->a;
+            }
+            break;
+        case 0x03: // INX B
+            emu->c++;
+            if (emu->c == 0) {
+                emu->b++;
+            }
+            break;
         case 0x04: // INR B
             {
                 uint16_t result = emu->b + 1;
@@ -136,6 +152,13 @@ int emulate(State8080 *emu) {
             emu->b = opcode[1];
             emu->pc++;
             break;
+        case 0x07: // RLC
+            {
+                uint8_t bit_7 = 0x80 == (emu->a & 0x80);
+                emu->cc.carry = bit_7;
+                emu->a = emu->a << 1 | bit_7;
+            }
+            break;
         case 0x08: // NOP
             break;
         case 0x09: // DAD B
@@ -158,6 +181,12 @@ int emulate(State8080 *emu) {
             break;
         case 0x10: // NOP
             break;
+        case 0x12: // STAX D
+            {
+                uint16_t offset = emu->d << 8 | emu->e;
+                emu->memory[offset] = emu->a;
+            }
+            break;
         case 0x14: // INR D
             {
                 uint16_t result = emu->d + 1;
@@ -168,10 +197,30 @@ int emulate(State8080 *emu) {
                 emu->d = emu->d + 1;
             }
             break;
+        case 0x17: // RAL
+            {
+                uint8_t bit_7 = 0x80 == (emu->a & 0x80);
+                emu->a = emu->a << 1 | emu->cc.carry;
+                emu->cc.carry = bit_7;
+            }
+            break;
+        case 0x1f: // RAR
+            {
+                uint8_t x = (1 == (emu->a & 1));
+                emu->a = emu->cc.carry << 7 | emu->a >> 1;
+                emu->cc.carry = x;
+            }
+            break;
         case 0x0a: // LDAX B
             {
                 uint16_t offset = emu->b << 8 | emu->c;
                 emu->a = emu->memory[offset];
+            }
+            break;
+        case 0x0b: // DCX B
+            emu->c -= 1;
+            if (emu->c == 0xff) {
+                emu->b -= 1;
             }
             break;
         case 0x0d: // DCR C
@@ -221,6 +270,12 @@ int emulate(State8080 *emu) {
             {
                 uint16_t offset = (emu->d << 8) | emu->e;
                 emu->a = emu->memory[offset];
+            }
+            break;
+        case 0x1b: // DCX D
+            emu->e -= 1;
+            if (emu->e == 0xff) {
+                emu->d -= 1;
             }
             break;
         case 0x1d: // DCR E
@@ -319,6 +374,12 @@ int emulate(State8080 *emu) {
                 emu->pc += 2;
             }
             break;
+        case 0x2b: // DCX H
+            emu->l -= 1;
+            if (emu->l == 0xff) {
+                emu->h -= 1;
+            }
+            break;
         case 0x2c: // INR L
             {
                 uint16_t result = emu->l + 1;
@@ -361,6 +422,19 @@ int emulate(State8080 *emu) {
                 emu->pc += 2;
             }
             break;
+        case 0x33: // INX SP
+            emu->sp += 1;
+            break;
+        case 0x34: // INR M
+            {
+                uint16_t result = read_memory_from_hl(emu) + 1;
+                emu->cc.zero = (result == 0);
+                emu->cc.parity = parity(result & 0xff, 8);
+                emu->cc.sign = (0x80 == (result & 0x80));
+                emu->cc.carry = (0x100 == (result & 0x100));
+                write_memory_from_hl(emu, result & 0xff);
+            }
+            break;
         case 0x35: // DCR M
             {
                 uint8_t value = read_memory_from_hl(emu);
@@ -374,7 +448,19 @@ int emulate(State8080 *emu) {
                 emu->pc++;
             }
             break;
+        case 0x37: // STC
+            emu->cc.carry = 1;
+            break;
         case 0x38: // NOP
+            break;
+        case 0x39: // DAD SP
+            {
+                uint32_t hl = emu->h << 8 | emu->l;
+                uint32_t res = hl + emu->sp;
+                emu->h = (res & 0xff00) >> 8;
+                emu->l = res & 0xff;
+                emu->cc.carry = (res & 0xffff0000) > 0;
+            }
             break;
         case 0x3b:
             emu->sp -= 1;
@@ -414,6 +500,9 @@ int emulate(State8080 *emu) {
         case 0x3e: // MVI A, ADDR
             emu->a = opcode[1];
             emu->pc++;
+            break;
+        case 0x3f: // CMC
+            emu->cc.carry = emu->cc.carry ? 0 : 1;
             break;
         case 0x41: // MOV B,C
             emu->b = emu->c;
@@ -553,7 +642,8 @@ int emulate(State8080 *emu) {
             break;
         case 0x6e: // MOV L,M
             emu->l = read_memory_from_hl(emu);
-        case 0x6f:
+            break;
+        case 0x6f: // MOV L,A
             emu->l = emu->a;
             break;
         case 0x70: // MOV M,B
@@ -661,6 +751,16 @@ int emulate(State8080 *emu) {
                 emu->a = emu->a + emu->l;
             }
             break;
+        case 0x86: // ADD M
+            {
+                uint16_t result = emu->a + read_memory_from_hl(emu);
+                emu->cc.zero = (result == 0);
+                emu->cc.parity = parity(result & 0xff, 8);
+                emu->cc.sign = (0x80 == (result & 0x80));
+                emu->cc.carry = (0x100 == (result & 0x100));
+                emu->a = result & 0xff;
+            }
+            break;
         case 0x87: // ADD A
             {
                 uint16_t result = emu->a + emu->a;
@@ -678,7 +778,7 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                emu->a = emu->a + emu->b + emu->cc.carry;
+                emu->a = result & 0xff;
             }
             break;
         case 0x89: // ADC C
@@ -688,7 +788,7 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                emu->a = emu->a + emu->c + emu->cc.carry;
+                emu->a = result & 0xff;
             }
             break;
         case 0x8a: // ADC D
@@ -698,7 +798,7 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                emu->a = emu->a + emu->d + emu->cc.carry;
+                emu->a = result & 0xff;
             }
             break;
         case 0x8b: // ADC E
@@ -708,7 +808,7 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                emu->a = emu->a + emu->e + emu->cc.carry;
+                emu->a = result & 0xff;
             }
             break;
         case 0x8c: // ADC H
@@ -718,7 +818,7 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                emu->a = emu->a + emu->h + emu->cc.carry;
+                emu->a = result & 0xff;
             }
             break;
         case 0x8d: // ADC L
@@ -728,7 +828,17 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                emu->a = emu->a + emu->l + emu->cc.carry;
+                emu->a = result & 0xff;
+            }
+            break;
+        case 0x8e: // ADC M
+            {
+                uint16_t result = emu->a + read_memory_from_hl(emu) + emu->cc.carry;
+                emu->cc.zero = (result == 0);
+                emu->cc.parity = parity(result & 0xff, 8);
+                emu->cc.sign = (0x80 == (result & 0x80));
+                emu->cc.carry = (0x100 == (result & 0x100));
+                emu->a = result & 0xff;
             }
             break;
         case 0x8f: // ADC A 
@@ -738,7 +848,7 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                emu->a = emu->a + emu->a + emu->cc.carry;
+                emu->a = result & 0xff;
             }
             break;
         case 0x90: // SUB B
@@ -801,6 +911,16 @@ int emulate(State8080 *emu) {
                 emu->a = emu->a - emu->l;
             }
             break;
+        case 0x96: // SUB M
+            {
+                uint16_t result = emu->a - read_memory_from_hl(emu);
+                emu->cc.zero = (result == 0);
+                emu->cc.parity = parity(result & 0xff, 8);
+                emu->cc.sign = (0x80 == (result & 0x80));
+                emu->cc.carry = (0x100 == (result & 0x100));
+                emu->a = emu->a - read_memory_from_hl(emu);
+            }
+            break;
         case 0x97: // SUB A 
             {
                 uint16_t result = emu->a - emu->a;
@@ -818,7 +938,7 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                emu->a = emu->a - emu->b - emu->cc.carry;
+                emu->a = result & 0xff;
             }
             break;
         case 0x99: // SBB C
@@ -828,7 +948,7 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                emu->a = emu->a - emu->c - emu->cc.carry;
+                emu->a = result & 0xff;
             }
             break;
         case 0x9a: // SBB D
@@ -838,7 +958,7 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                emu->a = emu->a - emu->d - emu->cc.carry;
+                emu->a = result & 0xff;
             }
             break;
         case 0x9b: // SBB E
@@ -848,7 +968,7 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                emu->a = emu->a - emu->e - emu->cc.carry;
+                emu->a = result & 0xff;
             }
             break;
         case 0x9c: // SBB H
@@ -858,7 +978,7 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                emu->a = emu->a - emu->h - emu->cc.carry;
+                emu->a = result & 0xff;
             }
             break;
         case 0x9d: // SBB L
@@ -868,7 +988,17 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                emu->a = emu->a - emu->l - emu->cc.carry;
+                emu->a = result & 0xff;
+            }
+            break;
+        case 0x9e: // SBB M
+            {
+                uint16_t result = emu->a - read_memory_from_hl(emu) - emu->cc.carry;
+                emu->cc.zero = (result == 0);
+                emu->cc.parity = parity(result & 0xff, 8);
+                emu->cc.sign = (0x80 == (result & 0x80));
+                emu->cc.carry = (0x100 == (result & 0x100));
+                emu->a = result & 0xff;
             }
             break;
         case 0x9f: // SBB A 
@@ -878,7 +1008,7 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                emu->a = emu->cc.carry;
+                emu->a = result & 0xff;
             }
             break;
         case 0xa1: // ANA C
@@ -928,6 +1058,17 @@ int emulate(State8080 *emu) {
         case 0xa5: // ANA L
             {
                 uint8_t result = emu->a & emu->l;
+                emu->cc.zero = (result == 0);
+                emu->cc.parity = parity(result, 8);
+                emu->cc.sign = (0x80 == (result & 0x80));
+                emu->cc.carry = 0;
+                emu->cc.auxcarry = 0;
+                emu->a = result & 0xff;
+            }
+            break;
+        case 0xa6: // ANA M
+            {
+                uint8_t result = emu->a & read_memory_from_hl(emu);
                 emu->cc.zero = (result == 0);
                 emu->cc.parity = parity(result, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
@@ -1001,6 +1142,17 @@ int emulate(State8080 *emu) {
         case 0xad: // XRA L
             {
                 uint8_t result = emu->a ^ emu->l;
+                emu->cc.zero = (result == 0);
+                emu->cc.parity = parity(result, 8);
+                emu->cc.sign = (0x80 == (result & 0x80));
+                emu->cc.carry = 0;
+                emu->cc.auxcarry = 0;
+                emu->a = result;
+            }
+            break;
+        case 0xae: // XRA M
+            {
+                uint8_t result = emu->a ^ read_memory_from_hl(emu);
                 emu->cc.zero = (result == 0);
                 emu->cc.parity = parity(result, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
@@ -1083,6 +1235,17 @@ int emulate(State8080 *emu) {
                 emu->a = result & 0xff;
             }
             break;
+        case 0xb6: // ORA M
+            {
+                uint8_t result = emu->a | read_memory_from_hl(emu);
+                emu->cc.zero = (result == 0);
+                emu->cc.parity = parity(result, 8);
+                emu->cc.sign = (0x80 == (result & 0x80));
+                emu->cc.carry = 0;
+                emu->cc.auxcarry = 0;
+                emu->a = result & 0xff;
+            }
+            break;
         case 0xb7: // ORA A 
             {
                 uint8_t result = emu->a | emu->a;
@@ -1097,6 +1260,15 @@ int emulate(State8080 *emu) {
         case 0xb8: // CMP B
             {
                 uint16_t result = emu->a - emu->b;
+                emu->cc.zero = (result == 0);
+                emu->cc.parity = parity(result & 0xff, 8);
+                emu->cc.sign = (0x80 == (result & 0x80));
+                emu->cc.carry = (0x100 == (result & 0x100));
+            }
+            break;
+        case 0xb9: // CMP C
+            {
+                uint16_t result = emu->a - emu->c;
                 emu->cc.zero = (result == 0);
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
@@ -1133,6 +1305,15 @@ int emulate(State8080 *emu) {
         case 0xbd: // CMP L
             {
                 uint16_t result = emu->a - emu->l;
+                emu->cc.zero = (result == 0);
+                emu->cc.parity = parity(result & 0xff, 8);
+                emu->cc.sign = (0x80 == (result & 0x80));
+                emu->cc.carry = (0x100 == (result & 0x100));
+            }
+            break;
+        case 0xbe: // CMP M 
+            {
+                uint16_t result = emu->a - read_memory_from_hl(emu);
                 emu->cc.zero = (result == 0);
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
@@ -1184,7 +1365,7 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                emu->a = emu->a + opcode[1];
+                emu->a = result & 0xff;
                 emu->pc++;
             }
             break;
@@ -1425,6 +1606,9 @@ int emulate(State8080 *emu) {
                 emu->sp += 2;
             }
             break;
+        case 0xe9: // PCHL
+            emu->pc = emu->h << 8 | emu->l;
+            break;
         case 0xea: // JPE addr
             if (emu->cc.parity) {
                 emu->pc = (opcode[2] << 8) | opcode[1];
@@ -1529,6 +1713,9 @@ int emulate(State8080 *emu) {
                 emu->sp += 2;
             }
             break;
+        case 0xf9: // SPHL
+            emu->sp = emu->h << 8 | emu->l;
+            break;
         case 0xfa: // JM addr
             if (emu->cc.sign) {
                 emu->pc = (opcode[2] << 8) | opcode[1];
@@ -1619,15 +1806,16 @@ int main(int argc, char* argv[]) {
         files -= 2;
 
         emulator.pc = addr;
-        emulator.memory[368] = 0x7;
-
-        // Skip DAA test    
-        emulator.memory[0x59c] = 0xc3; //JMP    
-        emulator.memory[0x59d] = 0xc2;    
-        emulator.memory[0x59e] = 0x05;    
     }
 
     read_rom_into_memory(&emulator, addr, ++argv, files);
+
+    emulator.memory[368] = 0x7;
+
+    // Skip DAA test    
+    emulator.memory[0x59d] = 0xc3; //JMP
+    emulator.memory[0x59e] = 0xc2;
+    emulator.memory[0x59f] = 0x05;
     while (error == 0) {
         error = emulate(&emulator);
     }
