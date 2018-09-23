@@ -3,6 +3,7 @@ This is my implementation of emulator101.com
 ## Testing
 
 ```bash
-gcc -ggdb emulator.c disassembler.c -o emulator
-./emulator --start 0x100 cpudiag.bin
+$ make test
 ```
+
+This will use a 8080 binary that will try to test many opcodes.  It's not a perfect test but can catch bugs in many of the opcodes.

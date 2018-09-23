@@ -15,8 +15,8 @@ disassembler: $(DISASSEMBLER_OBJS)
 	./disassembler invaders
 
 clean:
-	rm *.o emulator
+	rm -f *.o emulator
 
 test: $(EMULATOR_OBJS)
-	gcc $(CFLAGS) $(EMULATOR_OBJS) -o emulator
-	./emulator cpudiag.asm
+	gcc -D CPU_TEST $(CFLAGS) $(EMULATOR_OBJS) -o emulator
+	./emulator --start 0x100 cpudiag.bin | head -n 1 | grep 'CPU IS OPERATIONAL'
