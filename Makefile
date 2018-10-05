@@ -8,8 +8,8 @@ else
     CFLAGS = -ggdb
 endif
 
-EMULATOR_OBJS = emulator.c disassembler.c
-DISASSEMBLER_OBJS = disassembler.c test.c
+EMULATOR_OBJS = emulator.c disassembler.c tests/emulator.c
+DISASSEMBLER_OBJS = disassembler.c tests/disassembler.c
 
 emulator: $(EMULATOR_OBJS)
 	$(CC) $(CFLAGS) $(EMULATOR_OBJS) -o emulator
