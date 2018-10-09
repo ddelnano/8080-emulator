@@ -137,7 +137,7 @@ int parity(int x, int size)
 
 void push_stack(State8080* emu, uint16_t value) {
     
-    write_memory(emu, emu->sp - 1, value & 0xff00);
+    write_memory(emu, emu->sp - 1, (value & 0xff00) >> 8);
     write_memory(emu, emu->sp - 2, value & 0xff);
     
     emu->sp -= 2;
@@ -145,7 +145,7 @@ void push_stack(State8080* emu, uint16_t value) {
 
 void generate_interrupt(State8080* emu, int interrupt_num) {
     // Save pc on the stack
-    push_stack(emu, (emu->pc & 0xff00 << 8) | (emu->pc & 0xff));
+    push_stack(emu, emu->pc);
     
     // Each restart instruction is 8 bytes and there
     // are 8 of them.  Juump to the correct one.
@@ -376,7 +376,7 @@ int emulate(State8080 *emu) {
             {
                 uint16_t offset = opcode[1] | (opcode[2] << 8);
                 write_memory(emu, offset, emu->l);
-                write_memory(emu, offset + 1, emu->l);
+                write_memory(emu, offset + 1, emu->h);
                 emu->pc += 2;
             }
             break;
@@ -1777,17 +1777,14 @@ int emulate(State8080 *emu) {
             break;
         case 0xf5: // PUSH PSW
             {
-                /* emu->memory[emu->sp - 2] = (emu->cc.zero << 6    | */
-                /*                             emu->cc.sign << 7    | */
-                /*                             emu->cc.auxcarry << 4| */
-                /*                             emu->cc.parity << 2  | */
-                /*                             (emu->cc.carry & 0x1)); */
-                uint16_t ret_instruction = (emu->cc.zero << 6    |
-                                            emu->cc.sign << 7    |
-                                            emu->cc.auxcarry << 4|
-                                            emu->cc.parity << 2  |
-                                            (emu->cc.carry & 0x1)) << 8 | emu->a;
-                /* emu->memory[emu->sp - 1] = emu->a; */
+                uint16_t ret_instruction = emu->a << 8 |
+                    (
+                        emu->cc.zero     << 6    |
+                        emu->cc.sign     << 7    |
+                        emu->cc.auxcarry << 4    |
+                        emu->cc.parity   << 2    |
+                        (emu->cc.carry & 0x1)
+                    );
                 push_stack(emu, ret_instruction);
             }
             break;

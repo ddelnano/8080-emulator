@@ -23,5 +23,5 @@ clean:
 	rm -f *.o emulator
 
 test: $(EMULATOR_OBJS)
-	$(CC) -D CPU_TEST $(CFLAGS) $(EMULATOR_OBJS) -o emulator
-	./emulator --start 0x100 cpudiag.bin | head -n 607 | grep 'CPU IS OPERATIONAL'
+	$(CC) -D DEBUG -D CPU_TEST $(CFLAGS) $(EMULATOR_OBJS) -o emulator
+	./emulator --start 0x100 cpudiag.bin | head -n 612 | grep 'CPU IS OPERATIONAL'
