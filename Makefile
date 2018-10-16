@@ -17,7 +17,7 @@ emulator: $(EMULATOR_OBJS)
 
 disassembler: $(DISASSEMBLER_OBJS)
 	$(CC) $(DISASSEMBLER_OBJS) -o disassembler
-	./disassembler invaders
+	./disassembler invaders.h invaders.g invaders.f invaders.e
 
 clean:
 	rm -f *.o emulator

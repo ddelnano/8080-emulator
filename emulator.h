@@ -22,7 +22,7 @@ typedef struct State8080 {
     uint16_t pc;
     uint16_t sp;
     uint8_t *memory;
-    uint8_t int_enable;
+uint8_t int_enable;
     struct ConditionCodes cc;
 } State8080;
 
@@ -32,4 +32,4 @@ int emulate(State8080 *emu);
 
 void generate_interrupt(State8080* emu, int interrupt_num);
 
-void print_last_1000_instructions();
+void print_last_1000_instructions(State8080* emu);

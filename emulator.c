@@ -68,14 +68,14 @@ void write_memory(State8080* emu, uint16_t addr, uint8_t value)
 {
 #ifndef CPU_TEST
     if (addr < 0x2000) {
-        printf("Writing into ROM at address %d, exiting!\n", addr);
-        print_last_1000_instructions();
+        printf("Writing into ROM at address %x, exiting!\n", addr);
+        print_last_1000_instructions(emu);
         exit(0);
     }
     if (addr >=0x4000)
     {    
         printf("Writing out of Space Invaders RAM not allowed %x\n", addr);
-        return;    
+        return;
     }
 #endif
 
@@ -1067,7 +1067,7 @@ int emulate(State8080 *emu) {
             break;
         case 0x9f: // SBB A 
             {
-                uint16_t result = emu->cc.carry;
+                uint16_t result = - emu->cc.carry;
                 emu->cc.zero = ((result & 0xff) == 0);
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
@@ -1544,10 +1544,10 @@ int emulate(State8080 *emu) {
                 emu->pc += 2;
             }
             break;
-//        case 0xd3: // OUT addr
-//            // TODO: Don't know what to do here yet.
-//            emu->pc++;
-//            break;
+        case 0xd3: // OUT addr
+            // TODO: Don't know what to do here yet.
+            emu->pc++;
+            break;
         case 0xd4: // CNC addr
             if (emu->cc.carry == 0) {
                 uint16_t ret_instruction = emu->pc + 2;
@@ -1831,32 +1831,6 @@ int emulate(State8080 *emu) {
             break;
         case 0xfe: // CPI addr
             {
-                // TODO: what the fuck
-                int cheated = 0;
-                if (opcode[1] == 0xd9) {
-                    emu->a = 0xd9;
-                    cheated = 1;
-                }
-                if (opcode[1] == 0x37) {
-                    emu->a = 0x37;
-                    cheated = 1;
-                }
-                if (opcode[1] == 0xe0) {
-                    emu->a = 0xe0;
-                    cheated = 1;
-                }
-                if (emu->pc == 0x3c9 && opcode[1] == 0xff) {
-                    emu->a = 0xff;
-                    cheated = 1;
-                }
-// Until I fix these bugs, crash the emulator if we run these
-// conditions in a real scenario.
-#ifndef CPU_TEST
-                if (cheated) {
-                    printf("Should not be cheating on CPI instruction! Exiting!\n");
-                    exit(1);
-                }
-#endif
                 uint16_t result = emu->a - opcode[1];
                 emu->cc.zero = ((result & 0xff) == 0);
                 emu->cc.parity = parity(result & 0xff, 8);

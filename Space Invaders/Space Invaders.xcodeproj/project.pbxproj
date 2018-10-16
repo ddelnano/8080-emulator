@@ -19,6 +19,16 @@
 		FBEB5A9E215B4043000D1ADA /* Emulator8080.m in Sources */ = {isa = PBXBuildFile; fileRef = FBEB5A9D215B4043000D1ADA /* Emulator8080.m */; };
 		FBEB5A9F215B4DD7000D1ADA /* invaders.h in Resources */ = {isa = PBXBuildFile; fileRef = FBEB5A892158545F000D1ADA /* invaders.h */; };
 		FBEB5AA0215B4E50000D1ADA /* invaders.f in Resources */ = {isa = PBXBuildFile; fileRef = FBEB5A8A2158545F000D1ADA /* invaders.f */; };
+		FBF9197F217588630054B030 /* 5.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF91975217588620054B030 /* 5.wav */; };
+		FBF91980217588630054B030 /* 2.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF91976217588620054B030 /* 2.wav */; };
+		FBF91981217588630054B030 /* 3.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF91977217588620054B030 /* 3.wav */; };
+		FBF91982217588630054B030 /* 9.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF91978217588630054B030 /* 9.wav */; };
+		FBF91983217588630054B030 /* 6.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF91979217588630054B030 /* 6.wav */; };
+		FBF91984217588630054B030 /* 0.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF9197A217588630054B030 /* 0.wav */; };
+		FBF91985217588630054B030 /* 4.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF9197B217588630054B030 /* 4.wav */; };
+		FBF91986217588630054B030 /* 7.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF9197C217588630054B030 /* 7.wav */; };
+		FBF91987217588630054B030 /* 8.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF9197D217588630054B030 /* 8.wav */; };
+		FBF91988217588630054B030 /* 1.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF9197E217588630054B030 /* 1.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +52,16 @@
 		FBEB5A97215B3A43000D1ADA /* GameView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameView.m; sourceTree = "<group>"; };
 		FBEB5A9C215B4043000D1ADA /* Emulator8080.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Emulator8080.h; sourceTree = "<group>"; };
 		FBEB5A9D215B4043000D1ADA /* Emulator8080.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Emulator8080.m; sourceTree = "<group>"; };
+		FBF91975217588620054B030 /* 5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 5.wav; sourceTree = "<group>"; };
+		FBF91976217588620054B030 /* 2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 2.wav; sourceTree = "<group>"; };
+		FBF91977217588620054B030 /* 3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 3.wav; sourceTree = "<group>"; };
+		FBF91978217588630054B030 /* 9.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 9.wav; sourceTree = "<group>"; };
+		FBF91979217588630054B030 /* 6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 6.wav; sourceTree = "<group>"; };
+		FBF9197A217588630054B030 /* 0.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 0.wav; sourceTree = "<group>"; };
+		FBF9197B217588630054B030 /* 4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 4.wav; sourceTree = "<group>"; };
+		FBF9197C217588630054B030 /* 7.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 7.wav; sourceTree = "<group>"; };
+		FBF9197D217588630054B030 /* 8.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 8.wav; sourceTree = "<group>"; };
+		FBF9197E217588630054B030 /* 1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 1.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +117,16 @@
 		FBEB5A8621585446000D1ADA /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FBF9197A217588630054B030 /* 0.wav */,
+				FBF9197E217588630054B030 /* 1.wav */,
+				FBF91976217588620054B030 /* 2.wav */,
+				FBF91977217588620054B030 /* 3.wav */,
+				FBF9197B217588630054B030 /* 4.wav */,
+				FBF91975217588620054B030 /* 5.wav */,
+				FBF91979217588630054B030 /* 6.wav */,
+				FBF9197C217588630054B030 /* 7.wav */,
+				FBF9197D217588630054B030 /* 8.wav */,
+				FBF91978217588630054B030 /* 9.wav */,
 				FBEB5A872158545F000D1ADA /* invaders.e */,
 				FBEB5A8A2158545F000D1ADA /* invaders.f */,
 				FBEB5A882158545F000D1ADA /* invaders.g */,
@@ -163,12 +193,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBF91983217588630054B030 /* 6.wav in Resources */,
 				FBEB5A7921585299000D1ADA /* Assets.xcassets in Resources */,
+				FBF91988217588630054B030 /* 1.wav in Resources */,
 				FBEB5A7C21585299000D1ADA /* MainMenu.xib in Resources */,
+				FBF91985217588630054B030 /* 4.wav in Resources */,
 				FBEB5A8B2158545F000D1ADA /* invaders.e in Resources */,
+				FBF91980217588630054B030 /* 2.wav in Resources */,
+				FBF91987217588630054B030 /* 8.wav in Resources */,
+				FBF91982217588630054B030 /* 9.wav in Resources */,
 				FBEB5A8C2158545F000D1ADA /* invaders.g in Resources */,
 				FBEB5AA0215B4E50000D1ADA /* invaders.f in Resources */,
+				FBF91981217588630054B030 /* 3.wav in Resources */,
+				FBF91984217588630054B030 /* 0.wav in Resources */,
 				FBEB5A9F215B4DD7000D1ADA /* invaders.h in Resources */,
+				FBF91986217588630054B030 /* 7.wav in Resources */,
+				FBF9197F217588630054B030 /* 5.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,7 +355,7 @@
 				DEVELOPMENT_TEAM = PN8TNGA2ZV;
 				ENABLE_NS_ASSERTIONS = YES;
 				ENABLE_TESTABILITY = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=true";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "Space Invaders/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ddelnano.Space-Invaders";

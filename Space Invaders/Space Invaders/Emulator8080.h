@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 #import "emulator.h"
 #include <time.h>
 
@@ -20,7 +21,13 @@
 @interface Emulator8080 : NSObject
 
 @property State8080* state;
-@property uint8_t in_port1;
+@property uint8_t     in_port1;
+@property uint8_t     shift0;         //LSB of Space Invader's external shift hardware
+@property uint8_t     shift1;         //MSB
+@property uint8_t     shift_offset;         // offset for external shift hardware
+@property uint8_t     out_port3, out_port5, last_out_port3, last_out_port5;
+
+@property NSSound     *ufo;
 
 - (void) KeyDown:(uint8_t) key;
 - (void) KeyUp:(uint8_t) key;
