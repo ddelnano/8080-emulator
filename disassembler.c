@@ -126,6 +126,7 @@ int disassemble(unsigned char *code) {
         case 0x73: printf("MOV    M,E"); break;
         case 0x74: printf("MOV    M,H"); break;
         case 0x75: printf("MOV    M,L"); break;
+        case 0x76: printf("HLT       "); break;
         case 0x77: printf("MOV    M,A"); break;
         case 0x78: printf("MOV    A,B"); break;
         case 0x79: printf("MOV    A,C"); break;

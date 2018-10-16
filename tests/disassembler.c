@@ -9,38 +9,46 @@ int main(int argc, char** argv)
         printf("Error must provide filename to disassemble");
         return 1;
     }
-    FILE *fptr;
-    unsigned long size;
-    fptr = fopen(argv[1], "rb");
 
-    // Seek to end of file and find size
-    fseek(fptr, 0, SEEK_END);
-    size = ftell(fptr);
+    unsigned int pc = 0;
+    for (int j = 1; j < argc; j++) {
+        FILE *fptr;
+        unsigned long size;
+        fptr = fopen(argv[j], "rb");
 
-    // Reset back to beginning of file
-    fseek(fptr, 0, SEEK_SET);
-    if (ftell(fptr) != 0) {
-        printf("Failed to reset pointer!");
-        return 1;
-    }
+        // Seek to end of file and find size
+        fseek(fptr, 0, SEEK_END);
+        size = ftell(fptr);
 
-    printf("Read file %s of size %ld\n\n", argv[1], size);
+        // Reset back to beginning of file
+        fseek(fptr, 0, SEEK_SET);
+        if (ftell(fptr) != 0) {
+            printf("Failed to reset pointer!");
+            return 1;
+        }
 
-    unsigned char *buffer = malloc(size);
-    fread(buffer, size, 1, fptr);
-    fclose(fptr);
+        printf("Read file %s of size %ld\n\n", argv[1], size);
 
-    unsigned int i = 0;
-    while (i < size) {
-        unsigned char *code = &buffer[i];
+        unsigned char *buffer = malloc(size);
+        fread(buffer, size, 1, fptr);
+        fclose(fptr);
 
-        /* printf("Found opcode [%02x]: ", buf); */
-        printf("%04x ", i);
+        unsigned int i = 0;
+        while (i < size) {
+            unsigned char *code = &buffer[i];
 
-        unsigned int opcode_len = disassemble(code);
+            printf("%04x ", pc);
 
-        printf("\n");
-        i += opcode_len;
+            int opcode_len = disassemble(code);
+
+            if (opcode_len < 0) {
+                exit(1);
+            }
+
+            printf("\n");
+            i += opcode_len;
+            pc += opcode_len;
+        }
     }
     return 0;
 }
