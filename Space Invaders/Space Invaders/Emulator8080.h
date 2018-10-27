@@ -19,6 +19,11 @@
 #define KEY_PAUSE 'p'
 
 @interface Emulator8080 : NSObject
+{
+    double      lastTimer;
+    double      nextInterrupt;
+    int         whichInterrupt;
+}
 
 @property State8080* state;
 @property uint8_t     in_port1;

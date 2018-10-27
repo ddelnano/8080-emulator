@@ -131,9 +131,76 @@
 
 - (void) startEmulation
 {
-    NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(runCpu) object:nil];
+    NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(doCPU) object:nil];
     
     [thread start];
+}
+
+-(void) doCPU
+{
+    @autoreleasepool
+    {
+        while(1)
+        {
+            double now = [self timeusec];
+            
+            if (lastTimer == 0.0)
+            {
+                lastTimer = now;
+                nextInterrupt = lastTimer + 16000.0;
+                whichInterrupt = 1;
+            }
+            
+            if ((self.state->int_enable) && (now > nextInterrupt))
+            {
+                if (whichInterrupt == 1)
+                {
+                    generate_interrupt(self.state, 1);
+                    whichInterrupt = 2;
+                }
+                else
+                {
+                    generate_interrupt(self.state, 2);
+                    whichInterrupt = 1;
+                }
+                nextInterrupt = now+8000.0;
+            }
+            
+            
+            //How much time has passed?  How many instructions will it take to keep up with
+            // the current time?  Assume:
+            //CPU is 2 MHz
+            // so 2M cycles/sec
+            
+            double sinceLast = now - lastTimer; // microseconds
+            int cycles_to_catch_up = 2 * sinceLast;
+            int cycles = 0;
+            
+            while (cycles_to_catch_up > cycles)
+            {
+                unsigned char *op;
+                op = &self.state->memory[self.state->pc];
+                if (*op == 0xdb) //machine specific handling for IN
+                {
+                    self.state->a = [self InPort:op[1]];
+                    self.state->pc += 2;
+                    cycles+=3;
+                }
+                else if (*op == 0xd3) //machine specific handling for OUT
+                {
+                    [self OutSpaceInvaders:op[1] value:self.state->a];
+                    self.state->pc += 2;
+                    cycles+=3;
+                    [self PlaySounds];
+                }
+                else
+                    cycles += emulate(self.state);
+            
+            }
+            lastTimer  = now;
+            [NSThread sleepForTimeInterval:.003];
+        }
+    } //autorelease pool
 }
 
 - (void) runCpu
