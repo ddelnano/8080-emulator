@@ -165,7 +165,6 @@ int emulate(State8080 *emu) {
 #endif
     emu->pc++;
 
-
     switch (*opcode) {
         case 0x00: break;
         case 0x01: // LXI B
@@ -210,9 +209,9 @@ int emulate(State8080 *emu) {
             break;
         case 0x07: // RLC
             {
-                uint8_t bit_7 = 0x80 == (emu->a & 0x80);
-                emu->cc.carry = bit_7;
-                emu->a = emu->a << 1 | bit_7;
+                uint8_t x = emu->a;
+                emu->cc.carry = 0x80 == (x & 0x80);
+                emu->a = x << 1 | ((x & 0x80) >> 7);
             }
             break;
         case 0x08: // NOP
@@ -293,10 +292,13 @@ int emulate(State8080 *emu) {
             emu->pc++;
             break;
         case 0x0f: // RRC
-            emu->cc.carry = emu->a & 0x1;
-            emu->a = (emu->a >> 1) | (emu->cc.carry << 7);
+        {
+            uint8_t x = emu->a;
+            emu->a = ((x & 1) << 7) | (x >> 1);
+            emu->cc.carry = (1 == (x&1));
+        }
             break;
-        case 0x11:                                       // LXI D, D
+        case 0x11:                                       // LXI D,word
             emu->d = opcode[2];
             emu->e = opcode[1];
             emu->pc += 2;
@@ -410,7 +412,17 @@ int emulate(State8080 *emu) {
             emu->pc++;
             break;
         case 0x27: // DAA, TODO: not implementing this so just skip it
-            emu->pc += 2;
+            if ((emu->a &0xf) > 9)
+                emu->a += 6;
+            if ((emu->a&0xf0) > 0x90)
+            {
+                uint16_t res = (uint16_t) emu->a + 0x60;
+                emu->a = res & 0xff;
+                emu->cc.carry = (res > 0xff);
+                emu->cc.zero = ((res&0xff) == 0);
+                emu->cc.sign = (0x80 == (res & 0x80));
+                emu->cc.parity = parity(res&0xff, 8);
+            }
             break;
         case 0x28: // NOP
             break;
@@ -494,6 +506,9 @@ int emulate(State8080 *emu) {
         case 0x35: // DCR M
             {
                 uint8_t value = read_memory_from_hl(emu);
+                emu->cc.zero = (value == 0);
+                emu->cc.sign = (0x80 == (value & 0x80));
+                emu->cc.parity = parity(value, 8);
                 write_memory_from_hl(emu, value - 1);
             }
             break;

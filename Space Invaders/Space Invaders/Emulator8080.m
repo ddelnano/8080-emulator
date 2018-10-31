@@ -98,7 +98,7 @@
             self.in_port1 |= 0x10;
             break;
         case KEY_P1_START:
-            self.in_port1 |= 0x2;
+            self.in_port1 |= 0x04;
             break;
     }
     // bit 3 is always 1
@@ -122,7 +122,7 @@
             self.in_port1 &= ~0x10;
             break;
         case KEY_P1_START:
-            self.in_port1 &= ~0x2;
+            self.in_port1 &= ~0x04;
             break;
     }
     
