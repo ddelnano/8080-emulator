@@ -1,0 +1,405 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FBEB5A7721585299000D1ADA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FBEB5A7621585299000D1ADA /* AppDelegate.m */; };
+		FBEB5A7921585299000D1ADA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FBEB5A7821585299000D1ADA /* Assets.xcassets */; };
+		FBEB5A7C21585299000D1ADA /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = FBEB5A7A21585299000D1ADA /* MainMenu.xib */; };
+		FBEB5A7F21585299000D1ADA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FBEB5A7E21585299000D1ADA /* main.m */; };
+		FBEB5A8B2158545F000D1ADA /* invaders.e in Resources */ = {isa = PBXBuildFile; fileRef = FBEB5A872158545F000D1ADA /* invaders.e */; };
+		FBEB5A8C2158545F000D1ADA /* invaders.g in Resources */ = {isa = PBXBuildFile; fileRef = FBEB5A882158545F000D1ADA /* invaders.g */; };
+		FBEB5A8F215B343F000D1ADA /* emulator.c in Sources */ = {isa = PBXBuildFile; fileRef = FBEB5A8E215B343F000D1ADA /* emulator.c */; };
+		FBEB5A91215B3447000D1ADA /* disassembler.c in Sources */ = {isa = PBXBuildFile; fileRef = FBEB5A90215B3447000D1ADA /* disassembler.c */; };
+		FBEB5A98215B3A43000D1ADA /* GameView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBEB5A97215B3A43000D1ADA /* GameView.m */; };
+		FBEB5A9E215B4043000D1ADA /* Emulator8080.m in Sources */ = {isa = PBXBuildFile; fileRef = FBEB5A9D215B4043000D1ADA /* Emulator8080.m */; };
+		FBEB5A9F215B4DD7000D1ADA /* invaders.h in Resources */ = {isa = PBXBuildFile; fileRef = FBEB5A892158545F000D1ADA /* invaders.h */; };
+		FBEB5AA0215B4E50000D1ADA /* invaders.f in Resources */ = {isa = PBXBuildFile; fileRef = FBEB5A8A2158545F000D1ADA /* invaders.f */; };
+		FBF9197F217588630054B030 /* 5.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF91975217588620054B030 /* 5.wav */; };
+		FBF91980217588630054B030 /* 2.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF91976217588620054B030 /* 2.wav */; };
+		FBF91981217588630054B030 /* 3.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF91977217588620054B030 /* 3.wav */; };
+		FBF91982217588630054B030 /* 9.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF91978217588630054B030 /* 9.wav */; };
+		FBF91983217588630054B030 /* 6.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF91979217588630054B030 /* 6.wav */; };
+		FBF91984217588630054B030 /* 0.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF9197A217588630054B030 /* 0.wav */; };
+		FBF91985217588630054B030 /* 4.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF9197B217588630054B030 /* 4.wav */; };
+		FBF91986217588630054B030 /* 7.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF9197C217588630054B030 /* 7.wav */; };
+		FBF91987217588630054B030 /* 8.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF9197D217588630054B030 /* 8.wav */; };
+		FBF91988217588630054B030 /* 1.wav in Resources */ = {isa = PBXBuildFile; fileRef = FBF9197E217588630054B030 /* 1.wav */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		FBEB5A7221585299000D1ADA /* Space Invaders.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Space Invaders.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBEB5A7521585299000D1ADA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		FBEB5A7621585299000D1ADA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		FBEB5A7821585299000D1ADA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FBEB5A7B21585299000D1ADA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		FBEB5A7D21585299000D1ADA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FBEB5A7E21585299000D1ADA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		FBEB5A8021585299000D1ADA /* Space_Invaders.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Space_Invaders.entitlements; sourceTree = "<group>"; };
+		FBEB5A872158545F000D1ADA /* invaders.e */ = {isa = PBXFileReference; lastKnownFileType = file; name = invaders.e; path = ../../../invaders.e; sourceTree = "<group>"; };
+		FBEB5A882158545F000D1ADA /* invaders.g */ = {isa = PBXFileReference; lastKnownFileType = file; name = invaders.g; path = ../../../invaders.g; sourceTree = "<group>"; };
+		FBEB5A892158545F000D1ADA /* invaders.h */ = {isa = PBXFileReference; explicitFileType = compiled; fileEncoding = 4; name = invaders.h; path = ../../../invaders.h; sourceTree = "<group>"; };
+		FBEB5A8A2158545F000D1ADA /* invaders.f */ = {isa = PBXFileReference; explicitFileType = compiled; fileEncoding = 4; name = invaders.f; path = ../../../invaders.f; sourceTree = "<group>"; };
+		FBEB5A8E215B343F000D1ADA /* emulator.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = emulator.c; path = ../../emulator.c; sourceTree = "<group>"; };
+		FBEB5A90215B3447000D1ADA /* disassembler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = disassembler.c; path = ../../disassembler.c; sourceTree = "<group>"; };
+		FBEB5A92215B365F000D1ADA /* emulator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = emulator.h; path = ../../emulator.h; sourceTree = "<group>"; };
+		FBEB5A93215B3669000D1ADA /* disassembler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = disassembler.h; path = ../../disassembler.h; sourceTree = "<group>"; };
+		FBEB5A96215B3A43000D1ADA /* GameView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameView.h; sourceTree = "<group>"; };
+		FBEB5A97215B3A43000D1ADA /* GameView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameView.m; sourceTree = "<group>"; };
+		FBEB5A9C215B4043000D1ADA /* Emulator8080.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Emulator8080.h; sourceTree = "<group>"; };
+		FBEB5A9D215B4043000D1ADA /* Emulator8080.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Emulator8080.m; sourceTree = "<group>"; };
+		FBF91975217588620054B030 /* 5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 5.wav; sourceTree = "<group>"; };
+		FBF91976217588620054B030 /* 2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 2.wav; sourceTree = "<group>"; };
+		FBF91977217588620054B030 /* 3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 3.wav; sourceTree = "<group>"; };
+		FBF91978217588630054B030 /* 9.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 9.wav; sourceTree = "<group>"; };
+		FBF91979217588630054B030 /* 6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 6.wav; sourceTree = "<group>"; };
+		FBF9197A217588630054B030 /* 0.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 0.wav; sourceTree = "<group>"; };
+		FBF9197B217588630054B030 /* 4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 4.wav; sourceTree = "<group>"; };
+		FBF9197C217588630054B030 /* 7.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 7.wav; sourceTree = "<group>"; };
+		FBF9197D217588630054B030 /* 8.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 8.wav; sourceTree = "<group>"; };
+		FBF9197E217588630054B030 /* 1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = 1.wav; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FBEB5A6F21585299000D1ADA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FBEB5A6921585299000D1ADA = {
+			isa = PBXGroup;
+			children = (
+				FBEB5A7421585299000D1ADA /* Space Invaders */,
+				FBEB5A7321585299000D1ADA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FBEB5A7321585299000D1ADA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FBEB5A7221585299000D1ADA /* Space Invaders.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FBEB5A7421585299000D1ADA /* Space Invaders */ = {
+			isa = PBXGroup;
+			children = (
+				FBEB5A8621585446000D1ADA /* Supporting Files */,
+				FBEB5A7521585299000D1ADA /* AppDelegate.h */,
+				FBEB5A7621585299000D1ADA /* AppDelegate.m */,
+				FBEB5A92215B365F000D1ADA /* emulator.h */,
+				FBEB5A8E215B343F000D1ADA /* emulator.c */,
+				FBEB5A93215B3669000D1ADA /* disassembler.h */,
+				FBEB5A90215B3447000D1ADA /* disassembler.c */,
+				FBEB5A7821585299000D1ADA /* Assets.xcassets */,
+				FBEB5A7A21585299000D1ADA /* MainMenu.xib */,
+				FBEB5A7D21585299000D1ADA /* Info.plist */,
+				FBEB5A7E21585299000D1ADA /* main.m */,
+				FBEB5A8021585299000D1ADA /* Space_Invaders.entitlements */,
+				FBEB5A96215B3A43000D1ADA /* GameView.h */,
+				FBEB5A97215B3A43000D1ADA /* GameView.m */,
+				FBEB5A9C215B4043000D1ADA /* Emulator8080.h */,
+				FBEB5A9D215B4043000D1ADA /* Emulator8080.m */,
+			);
+			path = "Space Invaders";
+			sourceTree = "<group>";
+		};
+		FBEB5A8621585446000D1ADA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FBF9197A217588630054B030 /* 0.wav */,
+				FBF9197E217588630054B030 /* 1.wav */,
+				FBF91976217588620054B030 /* 2.wav */,
+				FBF91977217588620054B030 /* 3.wav */,
+				FBF9197B217588630054B030 /* 4.wav */,
+				FBF91975217588620054B030 /* 5.wav */,
+				FBF91979217588630054B030 /* 6.wav */,
+				FBF9197C217588630054B030 /* 7.wav */,
+				FBF9197D217588630054B030 /* 8.wav */,
+				FBF91978217588630054B030 /* 9.wav */,
+				FBEB5A872158545F000D1ADA /* invaders.e */,
+				FBEB5A8A2158545F000D1ADA /* invaders.f */,
+				FBEB5A882158545F000D1ADA /* invaders.g */,
+				FBEB5A892158545F000D1ADA /* invaders.h */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FBEB5A7121585299000D1ADA /* Space Invaders */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FBEB5A8321585299000D1ADA /* Build configuration list for PBXNativeTarget "Space Invaders" */;
+			buildPhases = (
+				FBEB5A6E21585299000D1ADA /* Sources */,
+				FBEB5A6F21585299000D1ADA /* Frameworks */,
+				FBEB5A7021585299000D1ADA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Space Invaders";
+			productName = "Space Invaders";
+			productReference = FBEB5A7221585299000D1ADA /* Space Invaders.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FBEB5A6A21585299000D1ADA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = ddelnano;
+				TargetAttributes = {
+					FBEB5A7121585299000D1ADA = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = FBEB5A6D21585299000D1ADA /* Build configuration list for PBXProject "Space Invaders" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FBEB5A6921585299000D1ADA;
+			productRefGroup = FBEB5A7321585299000D1ADA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FBEB5A7121585299000D1ADA /* Space Invaders */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FBEB5A7021585299000D1ADA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FBF91983217588630054B030 /* 6.wav in Resources */,
+				FBEB5A7921585299000D1ADA /* Assets.xcassets in Resources */,
+				FBF91988217588630054B030 /* 1.wav in Resources */,
+				FBEB5A7C21585299000D1ADA /* MainMenu.xib in Resources */,
+				FBF91985217588630054B030 /* 4.wav in Resources */,
+				FBEB5A8B2158545F000D1ADA /* invaders.e in Resources */,
+				FBF91980217588630054B030 /* 2.wav in Resources */,
+				FBF91987217588630054B030 /* 8.wav in Resources */,
+				FBF91982217588630054B030 /* 9.wav in Resources */,
+				FBEB5A8C2158545F000D1ADA /* invaders.g in Resources */,
+				FBEB5AA0215B4E50000D1ADA /* invaders.f in Resources */,
+				FBF91981217588630054B030 /* 3.wav in Resources */,
+				FBF91984217588630054B030 /* 0.wav in Resources */,
+				FBEB5A9F215B4DD7000D1ADA /* invaders.h in Resources */,
+				FBF91986217588630054B030 /* 7.wav in Resources */,
+				FBF9197F217588630054B030 /* 5.wav in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FBEB5A6E21585299000D1ADA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FBEB5A98215B3A43000D1ADA /* GameView.m in Sources */,
+				FBEB5A8F215B343F000D1ADA /* emulator.c in Sources */,
+				FBEB5A91215B3447000D1ADA /* disassembler.c in Sources */,
+				FBEB5A7F21585299000D1ADA /* main.m in Sources */,
+				FBEB5A9E215B4043000D1ADA /* Emulator8080.m in Sources */,
+				FBEB5A7721585299000D1ADA /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		FBEB5A7A21585299000D1ADA /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FBEB5A7B21585299000D1ADA /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		FBEB5A8121585299000D1ADA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		FBEB5A8221585299000D1ADA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		FBEB5A8421585299000D1ADA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Space Invaders/Space_Invaders.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = PN8TNGA2ZV;
+				ENABLE_NS_ASSERTIONS = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				INFOPLIST_FILE = "Space Invaders/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ddelnano.Space-Invaders";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		FBEB5A8521585299000D1ADA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Space Invaders/Space_Invaders.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = PN8TNGA2ZV;
+				INFOPLIST_FILE = "Space Invaders/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ddelnano.Space-Invaders";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FBEB5A6D21585299000D1ADA /* Build configuration list for PBXProject "Space Invaders" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FBEB5A8121585299000D1ADA /* Debug */,
+				FBEB5A8221585299000D1ADA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FBEB5A8321585299000D1ADA /* Build configuration list for PBXNativeTarget "Space Invaders" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FBEB5A8421585299000D1ADA /* Debug */,
+				FBEB5A8521585299000D1ADA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FBEB5A6A21585299000D1ADA /* Project object */;
+}

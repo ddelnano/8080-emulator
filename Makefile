@@ -8,8 +8,8 @@ else
     CFLAGS = -ggdb
 endif
 
-EMULATOR_OBJS = emulator.c disassembler.c
-DISASSEMBLER_OBJS = disassembler.c test.c
+EMULATOR_OBJS = emulator.c disassembler.c tests/emulator.c
+DISASSEMBLER_OBJS = disassembler.c tests/disassembler.c
 
 emulator: $(EMULATOR_OBJS)
 	$(CC) $(CFLAGS) $(EMULATOR_OBJS) -o emulator
@@ -17,11 +17,11 @@ emulator: $(EMULATOR_OBJS)
 
 disassembler: $(DISASSEMBLER_OBJS)
 	$(CC) $(DISASSEMBLER_OBJS) -o disassembler
-	./disassembler invaders
+	./disassembler invaders.h invaders.g invaders.f invaders.e
 
 clean:
 	rm -f *.o emulator
 
 test: $(EMULATOR_OBJS)
-	$(CC) -D CPU_TEST $(CFLAGS) $(EMULATOR_OBJS) -o emulator
-	./emulator --start 0x100 cpudiag.bin | head -n 607 | grep 'CPU IS OPERATIONAL'
+	$(CC) -D DEBUG -D CPU_TEST $(CFLAGS) $(EMULATOR_OBJS) -o emulator
+	./emulator --start 0x100 cpudiag.bin | head -n 612 | grep 'CPU IS OPERATIONAL'

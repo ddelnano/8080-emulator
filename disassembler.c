@@ -126,6 +126,7 @@ int disassemble(unsigned char *code) {
         case 0x73: printf("MOV    M,E"); break;
         case 0x74: printf("MOV    M,H"); break;
         case 0x75: printf("MOV    M,L"); break;
+        case 0x76: printf("HLT       "); break;
         case 0x77: printf("MOV    M,A"); break;
         case 0x78: printf("MOV    A,B"); break;
         case 0x79: printf("MOV    A,C"); break;
@@ -198,6 +199,7 @@ int disassemble(unsigned char *code) {
         case 0xbc: printf("CMP    H");   break;
         case 0xbd: printf("CMP    L");   break;
         case 0xbe: printf("CMP    M");   break;
+        case 0xbf: printf("CMP    A");   break;
         case 0xc0: printf("RNZ");     break;
         case 0xc1: printf("POP    B");   break;
         case 0xc2: printf("JNZ    $%02x%02x", code[2], code[1]); opcode_len = 3; break;
@@ -205,12 +207,14 @@ int disassemble(unsigned char *code) {
         case 0xc4: printf("CNZ    $%02x%02x", code[2], code[1]); opcode_len = 3; break;
         case 0xc5: printf("PUSH   B"); break;
         case 0xc6: printf("ADI    #$%02x", code[1]); opcode_len = 2; break;
+        case 0xc7: printf("RST 0"); break;
         case 0xc8: printf("RZ"); break;
         case 0xc9: printf("RET"); break;
         case 0xca: printf("JZ     $%02x%02x", code[2], code[1]); opcode_len = 3; break;
         case 0xcc: printf("CZ     $%02x%02x", code[2], code[1]); opcode_len = 3; break;
         case 0xcd: printf("CALL   $%02x%02x", code[2], code[1]); opcode_len = 3; break;
         case 0xce: printf("ACI    #$%02x", code[1]); opcode_len = 2; break;
+        case 0xcf: printf("RST    1"); break;
         case 0xd0: printf("RNC"); break;
         case 0xd1: printf("POP    D"); break;
         case 0xd2: printf("JNC    $%02x%02x", code[2], code[1]); opcode_len = 3; break;
@@ -237,6 +241,7 @@ int disassemble(unsigned char *code) {
         case 0xeb: printf("XCHG"); break;
         case 0xec: printf("CPE    $%02x%02x", code[2], code[1]); opcode_len = 3; break;
         case 0xee: printf("XRI    $%02x", code[1]); opcode_len = 2; break;
+        case 0xef: printf("RST    5"); break;
         case 0xf0: printf("RP"); break;
         case 0xf1: printf("POP    PSW"); break;
         case 0xf2: printf("JP     $%02x%02x",code[2],code[1]); opcode_len = 3; break;
