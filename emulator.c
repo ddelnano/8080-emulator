@@ -109,7 +109,7 @@ void unimplemented_instruction(State8080 *emu) {
     exit(1);
 }
 
-// TODO: Needs to be tested
+// TODO: Would like to use my own implementation
 /* int parity(int number) { */
 /*     int count = 0; */
 /*     uint8_t b = 1; */
@@ -411,7 +411,7 @@ int emulate(State8080 *emu) {
             emu->h = opcode[1];
             emu->pc++;
             break;
-        case 0x27: // DAA, TODO: not implementing this so just skip it
+        case 0x27: // DAA
             if ((emu->a &0xf) > 9)
                 emu->a += 6;
             if ((emu->a&0xf0) > 0x90)
@@ -1495,7 +1495,6 @@ int emulate(State8080 *emu) {
                 emu->pc += 2;
             }
             break;
-        // TODO: Understand how to tell how endianess matches the ret_instruction
         case 0xce: // ACI data
             {
                 uint16_t result = emu->a + opcode[1] + emu->cc.carry;
@@ -1503,7 +1502,6 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                /* emu->cc.auxcarry = 0; */
                 emu->a = result & 0xff;
                 emu->pc++;
             }
@@ -1559,10 +1557,10 @@ int emulate(State8080 *emu) {
                 emu->pc += 2;
             }
             break;
-        case 0xd3: // OUT addr
-            // TODO: Don't know what to do here yet.
-            emu->pc++;
-            break;
+        // TODO: Replace with more formal interface between the machine code
+        // and the emulator code.
+        /* case 0xd3: // OUT PORT*/
+            /* break; */
         case 0xd4: // CNC addr
             if (emu->cc.carry == 0) {
                 uint16_t ret_instruction = emu->pc + 2;
@@ -1586,7 +1584,6 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                /* emu->cc.auxcarry = 0; */
                 emu->a = result & 0xff;
                 emu->pc++;
             }
@@ -1624,6 +1621,10 @@ int emulate(State8080 *emu) {
                 emu->pc += 2;
             }
             break;
+        // TODO: Replace with more formal interface between the machine code
+        // and the emulator code.
+        /* case 0xdb: // IN PORT*/
+            /* break; */
         case 0xde: // SBI addr
             {
                 uint16_t result = emu->a - (opcode[1] + emu->cc.carry);
@@ -1631,7 +1632,6 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                /* emu->cc.auxcarry = 0; */
                 emu->a = result & 0xff;
                 emu->pc++;
             }
@@ -1692,11 +1692,8 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = 0;
-                emu->cc.auxcarry = 0;
                 emu->a = result;
                 emu->pc++;
-                // TODO: why no auxcarry
-                /* emu->auxcarry = */ 
             }
             break;
         case 0xe8: // RPE
@@ -1851,8 +1848,6 @@ int emulate(State8080 *emu) {
                 emu->cc.parity = parity(result & 0xff, 8);
                 emu->cc.sign = (0x80 == (result & 0x80));
                 emu->cc.carry = (0x100 == (result & 0x100));
-                // TODO: why no auxcarry
-                /* emu->auxcarry = */ 
                 emu->pc++;
             }
             break;
