@@ -1881,7 +1881,7 @@ int emulate(State8080 *emu) {
     return cycles8080[*opcode];
 }
 
-void print_last_1000_instructions(State8080* emu)
+void print_last_1000_instructions()
 {
     int i;
     for (i=0; i<100;i++)
@@ -1890,9 +1890,7 @@ void print_last_1000_instructions(State8080* emu)
         printf("%04d ", i*10);
         for (j=0; j<10; j++)
         {
-            int n = i*10 + j;
-//            uint16_t pc = last_1000_pcs[n];
-//            unsigned char *opcode = &emu->memory[pc];
+            unsigned int n = i*10 + j;
             printf("%04x %04x  ", last_1000_pcs[n], last_1000_sps[n]);
             if (n == instruction_count)
                 printf("**");
