@@ -4,10 +4,11 @@ CC = gcc
 
 XCODE_PROJ := Space\ Invaders
 OSX_EXECUTABLE := ./$(XCODE_PROJ)/Build/Products/Debug/$(XCODE_PROJ).app/Contents/MacOS/$(XCODE_PROJ)
+OSX_RUN_CMD := $(OSX_EXECUTABLE)
 
 ifdef DEBUG
     CFLAGS = -D DEBUG -ggdb
-    OSX_EXECUTABLE := lldb $(OSX_EXECUTABLE)
+    OSX_RUN_CMD := lldb $(OSX_EXECUTABLE)
 else
     CFLAGS = -ggdb
 endif
@@ -31,6 +32,8 @@ test: $(EMULATOR_OBJS)
 	$(CC) -D DEBUG -D CPU_TEST $(CFLAGS) $(EMULATOR_OBJS) -o emulator
 	./emulator --start 0x100 cpudiag.bin | head -n 612 | grep 'CPU IS OPERATIONAL'
 
-osx:
+$(OSX_EXECUTABLE):
 	xcodebuild -scheme $(XCODE_PROJ) -project $(XCODE_PROJ)/$(XCODE_PROJ).xcodeproj build
-	$(OSX_EXECUTABLE)
+
+osx: $(OSX_EXECUTABLE)
+	$(OSX_RUN_CMD)
