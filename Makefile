@@ -2,13 +2,16 @@
 
 CC = gcc
 
+XCODE_PROJ := Space\ Invaders
+OSX_EXECUTABLE := ./$(XCODE_PROJ)/Build/Products/Debug/$(XCODE_PROJ).app/Contents/MacOS/$(XCODE_PROJ)
+
 ifdef DEBUG
     CFLAGS = -D DEBUG -ggdb
+    OSX_EXECUTABLE := lldb $(OSX_EXECUTABLE)
 else
     CFLAGS = -ggdb
 endif
 
-XCODE_PROJ := Space\ Invaders
 
 EMULATOR_OBJS = emulator.c disassembler.c tests/emulator.c
 DISASSEMBLER_OBJS = disassembler.c tests/disassembler.c
@@ -30,4 +33,4 @@ test: $(EMULATOR_OBJS)
 
 osx:
 	xcodebuild -scheme $(XCODE_PROJ) -project $(XCODE_PROJ)/$(XCODE_PROJ).xcodeproj build
-	./$(XCODE_PROJ)/Build/Products/Debug/$(XCODE_PROJ).app/Contents/MacOS/$(XCODE_PROJ)
+	$(OSX_EXECUTABLE)
