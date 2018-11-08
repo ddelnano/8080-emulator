@@ -8,6 +8,8 @@ else
     CFLAGS = -ggdb
 endif
 
+XCODE_PROJ := Space\ Invaders
+
 EMULATOR_OBJS = emulator.c disassembler.c tests/emulator.c
 DISASSEMBLER_OBJS = disassembler.c tests/disassembler.c
 
@@ -25,3 +27,7 @@ clean:
 test: $(EMULATOR_OBJS)
 	$(CC) -D DEBUG -D CPU_TEST $(CFLAGS) $(EMULATOR_OBJS) -o emulator
 	./emulator --start 0x100 cpudiag.bin | head -n 612 | grep 'CPU IS OPERATIONAL'
+
+osx:
+	xcodebuild -scheme $(XCODE_PROJ) -project $(XCODE_PROJ)/$(XCODE_PROJ).xcodeproj build
+	./$(XCODE_PROJ)/Build/Products/Debug/$(XCODE_PROJ).app/Contents/MacOS/$(XCODE_PROJ)
