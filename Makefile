@@ -10,12 +10,13 @@ ifdef DEBUG
     CFLAGS = -D DEBUG -ggdb
     OSX_RUN_CMD := lldb $(OSX_EXECUTABLE)
 else
-    CFLAGS = -ggdb
+    CFLAGS = -ggdb -g
 endif
 
 
-EMULATOR_OBJS = emulator.c disassembler.c tests/emulator.c
-DISASSEMBLER_OBJS = disassembler.c tests/disassembler.c
+EMULATOR_OBJS = emulator.c disassembler.c wasm.c
+DISASSEMBLER_OBJS = disassembler.c
+TEST_OBJS = tests/emulator.c tests/disassembler.c
 
 emulator: $(EMULATOR_OBJS)
 	$(CC) $(CFLAGS) $(EMULATOR_OBJS) -o emulator
@@ -28,7 +29,7 @@ disassembler: $(DISASSEMBLER_OBJS)
 clean:
 	rm -f *.o emulator
 
-test: $(EMULATOR_OBJS)
+test: $(EMULATOR_OBJS) $(TEST_OBJS)
 	$(CC) -D DEBUG -D CPU_TEST $(CFLAGS) $(EMULATOR_OBJS) -o emulator
 	./emulator --start 0x100 cpudiag.bin | head -n 612 | grep 'CPU IS OPERATIONAL'
 
@@ -37,3 +38,10 @@ $(OSX_EXECUTABLE):
 
 osx: $(OSX_EXECUTABLE)
 	$(OSX_RUN_CMD)
+
+# TODO: Need a proper build for emcc to be available
+wasm: $(EMULATOR_OBJS)
+	emcc disassembler.c emulator.c wasm.c -o index.html -s USE_PTHREADS=1 -s WASM=0 -s USE_SDL=2 --embed-file invaders.h --embed-file invaders.g --embed-file invaders.f --embed-file invaders.e
+
+linux: $(EMULATOR_OBJS)
+	$(CC) $(CFLAGS) -I ../SDL-mirror/include -L ../SDL-mirror/build/build/.libs disassembler.c emulator.c wasm.c -l SDL2 -lpthread -o linux

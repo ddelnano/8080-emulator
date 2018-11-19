@@ -3,3 +3,10 @@ invaders*
 *.o
 emulator
 disassembler
+
+# wasm / asm.js
+*.html
+*.js*
+*.wasm
+
+linux

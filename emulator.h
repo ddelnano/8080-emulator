@@ -32,4 +32,4 @@ int emulate(State8080 *emu);
 
 void generate_interrupt(State8080* emu, int interrupt_num);
 
-void print_last_1000_instructions(State8080* emu);
+void print_last_1000_instructions();
