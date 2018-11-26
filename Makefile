@@ -43,5 +43,6 @@ osx: $(OSX_EXECUTABLE)
 wasm: $(EMULATOR_OBJS)
 	emcc disassembler.c emulator.c wasm.c -o index.html -s USE_PTHREADS=1 -s WASM=0 -s USE_SDL=2 --embed-file invaders.h --embed-file invaders.g --embed-file invaders.f --embed-file invaders.e
 
+# TODO: Replace include and library paths when bazel build is implemented
 linux: $(EMULATOR_OBJS)
 	$(CC) $(CFLAGS) -I ../SDL-mirror/include -L ../SDL-mirror/build/build/.libs disassembler.c emulator.c wasm.c -l SDL2 -lpthread -o linux
