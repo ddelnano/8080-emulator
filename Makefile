@@ -10,7 +10,7 @@ ifdef DEBUG
     CFLAGS = -D DEBUG -ggdb
     OSX_RUN_CMD := lldb $(OSX_EXECUTABLE)
 else
-    CFLAGS = -ggdb -g
+    CFLAGS = -ggdb -g # -Wall -Wextra
 endif
 
 
