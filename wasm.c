@@ -2,6 +2,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <assert.h>
 #include "SDL.h"
 
 #ifdef __EMSCRIPTEN__
@@ -22,7 +23,6 @@ _Atomic(struct State8080*) emulator;
 
 struct draw_screen_args {
   unsigned char* game_memory;
-  void* buffer;
   SDL_Renderer* renderer;
   SDL_Texture* texture;
 };
@@ -159,10 +159,10 @@ void* emulator_thread(void* arg)
 
 void events_thread(struct draw_screen_args* args)
 {
-  unsigned char* fb = args->game_memory;
-  SDL_Texture* texture = args->texture;
-  SDL_Renderer* renderer = args->renderer;
-  uint32_t* b = args->buffer;
+    unsigned char* fb = args->game_memory;
+    uint32_t buffer[256][224];
+    SDL_Texture* texture = args->texture;
+    SDL_Renderer* renderer = args->renderer;
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
       uint8_t ascii;
@@ -211,40 +211,59 @@ void events_thread(struct draw_screen_args* args)
           break;
       }
     }
-    int i, j;
-    // Walk the width of the screen by the byte
-    // 224 / 8 = 28
-    for (i=0; i< 224; i++)
-    {
-        // Walk the width of the screen by the byte
-        // 32 / 8 = 28
-        for (j = 0; j < 256; j+= 8)
-        {
-            int p;
-            //Read the first 1-bit pixel
-            // divide by 8 because there are 8 pixels
-            // in a byte
-            int bit_offset = i*(256/8) + j/8;
-            unsigned char pix = fb[(i*(256/8)) + j/8];
-            int offset = i*8 + j*8;
-            
-            //That makes 8 output vertical pixels
-            // we need to do a vertical flip
-            // so j needs to start at the last line
-            // and advance backward through the buffer
-            int byte_offset = 8 * bit_offset;
-            uint32_t *p1 = (uint32_t *)(&b[byte_offset]);
-            for (p=0; p<8; p++)
-            {
-                if ( 0!= (pix & (1<<p)))
-                    *p1 = RGB_ON;
+    for (int row = 0; row < 256; row += 8) {
+        for (int col = 0; col < 224; col++) {
+
+            uint32_t rotated_row = col;
+            uint32_t rotated_col = 256 - row;
+            uint32_t offset = rotated_row == 0 ? rotated_col/8 : (rotated_row * 256 - (256 - rotated_col))/8;
+            assert(offset < 7168);
+            unsigned char pixel = fb[offset];
+
+            // Loop through the pixel's 8 bits.  Each bit corresponds to a 32 bit int
+            // in the SDL screen buffer.  Since the pixel is rotated counter clockwise
+            // by 90 degress the first bit in the pixel is actually the last row in the
+            // SDL screen buffer.
+            // 
+            // 1 byte pixel (before it's rotated)
+            //
+            // +---+---+---+---+---+---+---+---+
+            // |   |   |   |   |   |   |   |   |
+            // |   |   |   |   |   |   |   |   |
+            // +-+-+---+---+---+---+---+---+---+
+            //   ^
+            //   |
+            //   |
+            //   |
+            //   +
+            //
+            // The 8 32 bit ints for a given pixel
+            //          +----+
+            //  row     |    |
+            //          +----+
+            //  row + 1 |    |
+            //          +----+
+            //  row + 2 |    |
+            //          +----+
+            //  row + 3 |    |
+            //          +----+
+            //  row + 4 |    |
+            //          +----+
+            //  row + 5 |    |
+            //          +----+
+            //  row + 6 |    |
+            //          +----+
+            //   +----> |    |
+            //  row + 7 +----+
+            for (int i = 0; i < 8; i++) {
+                if ((pixel & (1 << (7 - i))) != 0)
+                    buffer[row + i][col] = RGB_ON;
                 else
-                    *p1 = RGB_OFF;
-                p1++;
+                    buffer[row + i][col] = RGB_OFF;
             }
         }
     }
-    SDL_UpdateTexture(texture, NULL, b, 256 * sizeof(uint32_t));
+    SDL_UpdateTexture(texture, NULL, buffer, 224 * sizeof(uint32_t));
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
@@ -268,8 +287,8 @@ int main()
         "An SDL2 window",                  // window title
         SDL_WINDOWPOS_UNDEFINED,           // initial x position
         SDL_WINDOWPOS_UNDEFINED,           // initial y position
-        256,                               // width, in pixels
-        224,                               // height, in pixels
+        224,                               // width, in pixels
+        256,                               // height, in pixels
         SDL_WINDOW_OPENGL                  // flags - see below
     );
 
@@ -285,18 +304,16 @@ int main()
     if (rc != 0) {
       printf("Could not create pthread, exited with code %d", rc);
     }
-    uint32_t pixels[256 * 224];
     SDL_Texture* texture;
     SDL_Renderer* renderer;
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
     texture = SDL_CreateTexture(renderer,
-      SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, 256, 224);
+      SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, 224, 256);
 
     struct draw_screen_args args = {
       .game_memory = &emulator->memory[0x2400],
-      .buffer = &pixels,
-      .renderer = renderer,
-      .texture = texture,
+      .renderer    = renderer,
+      .texture     = texture,
     };
     while (1) {
       events_thread(&args);
