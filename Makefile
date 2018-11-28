@@ -7,7 +7,7 @@ OSX_EXECUTABLE := ./$(XCODE_PROJ)/Build/Products/Debug/$(XCODE_PROJ).app/Content
 OSX_RUN_CMD := $(OSX_EXECUTABLE)
 
 ifdef DEBUG
-    CFLAGS = -D DEBUG -ggdb
+    CFLAGS = -D DEBUG -ggdb --std=c99
     OSX_RUN_CMD := lldb $(OSX_EXECUTABLE)
 else
     CFLAGS = -ggdb -g # -Wall -Wextra
