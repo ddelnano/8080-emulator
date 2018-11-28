@@ -6,11 +6,10 @@ XCODE_PROJ := Space\ Invaders
 OSX_EXECUTABLE := ./$(XCODE_PROJ)/Build/Products/Debug/$(XCODE_PROJ).app/Contents/MacOS/$(XCODE_PROJ)
 OSX_RUN_CMD := $(OSX_EXECUTABLE)
 
+CFLAGS := -ggdb -g --std=c99 # -Wall -Wextra
 ifdef DEBUG
-    CFLAGS = -D DEBUG -ggdb --std=c99
+    CFLAGS += -D DEBUG
     OSX_RUN_CMD := lldb $(OSX_EXECUTABLE)
-else
-    CFLAGS = -ggdb -g # -Wall -Wextra
 endif
 
 
