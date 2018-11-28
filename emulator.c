@@ -69,7 +69,7 @@ void write_memory(State8080* emu, uint16_t addr, uint8_t value)
 #ifndef CPU_TEST
     if (addr < 0x2000) {
         printf("Writing into ROM at address %x, exiting!\n", addr);
-        print_last_1000_instructions(emu);
+        print_last_1000_instructions();
         exit(0);
     }
     if (addr >=0x4000)
@@ -158,7 +158,7 @@ void generate_interrupt(State8080* emu, int interrupt_num) {
 
 int emulate(State8080 *emu) {
     unsigned char *opcode = &emu->memory[emu->pc];
-#ifdef DEBUG
+#ifdef VERBOSE_LOG
     printf("%04x ", emu->pc);
 
     disassemble(opcode);
@@ -1861,7 +1861,7 @@ int emulate(State8080 *emu) {
         default: unimplemented_instruction(emu); break;
     }
 
-#ifdef DEBUG
+#ifdef VERBOSE_LOG
         printf("\t");
         printf("%c", emu->cc.zero ? 'z' : '.');
         printf("%c", emu->cc.sign ? 's' : '.');
