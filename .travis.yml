@@ -1,0 +1,14 @@
+language: c
+
+os:
+  - linux
+  - osx
+
+compiler:
+  - gcc
+
+matrix:
+  allow_failures:
+    - os: osx
+
+script: make test
