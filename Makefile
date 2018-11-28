@@ -14,9 +14,10 @@ else
 endif
 
 
-EMULATOR_OBJS = emulator.c disassembler.c linux.c
-DISASSEMBLER_OBJS = disassembler.c
-TEST_OBJS = tests/emulator.c tests/disassembler.c
+EMULATOR_OBJS = emulator.c disassembler.c
+DISASSEMBLER_OBJS = $(EMULATOR_OBJS) tests/disassembler.c
+TEST_OBJS = $(EMULATOR_OBJS) tests/emulator.c
+LINUX_OBJS = $(EMULATOR_OBJS) linux.c
 
 emulator: $(EMULATOR_OBJS)
 	$(CC) $(CFLAGS) $(EMULATOR_OBJS) -o emulator
@@ -29,9 +30,9 @@ disassembler: $(DISASSEMBLER_OBJS)
 clean:
 	rm -f *.o emulator
 
-test: $(EMULATOR_OBJS) $(TEST_OBJS)
-	$(CC) -D DEBUG -D CPU_TEST $(CFLAGS) $(EMULATOR_OBJS) -o emulator
-	./emulator --start 0x100 cpudiag.bin | head -n 612 | grep 'CPU IS OPERATIONAL'
+test: $(TEST_OBJS)
+	$(CC) -D DEBUG -D CPU_TEST $(CFLAGS) $(EMULATOR_OBJS) tests/emulator.c -o emulator
+	./emulator --start 0x100 cpudiag.bin | head -n 612 | grep -q 'CPU IS OPERATIONAL'
 
 $(OSX_EXECUTABLE):
 	xcodebuild -scheme $(XCODE_PROJ) -project $(XCODE_PROJ)/$(XCODE_PROJ).xcodeproj build
@@ -44,5 +45,5 @@ osx: $(OSX_EXECUTABLE)
 # 	emcc disassembler.c emulator.c wasm.c -o index.html -s USE_PTHREADS=1 -s WASM=0 -s USE_SDL=2 --embed-file invaders.h --embed-file invaders.g --embed-file invaders.f --embed-file invaders.e
 
 # TODO: Replace include and library paths when bazel build is implemented
-linux: $(EMULATOR_OBJS)
+linux: $(LINUX_OBJS)
 	$(CC) $(CFLAGS) -I ../SDL-mirror/include -L ../SDL-mirror/build/build/.libs disassembler.c emulator.c linux.c -l SDL2 -lpthread -o linux
